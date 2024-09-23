@@ -10,13 +10,13 @@ This repo contains the github actions for installing [AWS Copilot cli](https://g
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::111111111111:role/my-github-actions-role-test
           aws-region: us-east-1
-      - uses: ksivamuthu/aws-copilot-github-action@v0.0.8
+      - uses: ksivamuthu/aws-copilot-github-action@v0.0.9
         with:
           command: install
       - run: |
@@ -29,13 +29,13 @@ This repo contains the github actions for installing [AWS Copilot cli](https://g
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::111111111111:role/my-github-actions-role-test
           aws-region: us-east-1
-      - uses: ksivamuthu/aws-copilot-github-action@v0.0.8
+      - uses: ksivamuthu/aws-copilot-github-action@v0.0.9
         with:
           command: deploy
           app: your-awesome-app
@@ -53,7 +53,7 @@ In the with attribute, the name value can be used to define the name of the job 
 ```
   deploy:
     steps:
-      - uses: ksivamuthu/aws-copilot-github-action@v0.0.8
+      - uses: ksivamuthu/aws-copilot-github-action@v0.0.9
         with:
           command: deploy
           app: your-awesome-app
@@ -68,10 +68,40 @@ In the with attribute, the tag value can be used to define the tag image name
 ```
   deploy:
     steps:
-      - uses: ksivamuthu/aws-copilot-github-action@v0.0.8
+      - uses: ksivamuthu/aws-copilot-github-action@v0.0.9
         with:
           command: deploy
           app: your-awesome-app
           env: prod
           tag: image-name
+```
+
+### version
+
+In the with attribute, the version value can be used to define the aws copilot release version
+
+```
+  deploy:
+    steps:
+      - uses: ksivamuthu/aws-copilot-github-action@v0.0.9
+        with:
+          command: deploy
+          app: your-awesome-app
+          env: prod
+          version: v1.33.4
+```
+
+### deploy-env
+
+In the with attribute, the deploy-env value can be used to enable deploy the target environment before deploying the workload.
+
+```
+  deploy:
+    steps:
+      - uses: ksivamuthu/aws-copilot-github-action@v0.0.9
+        with:
+          command: deploy
+          app: your-awesome-app
+          env: prod
+          deploy-env: true
 ```
