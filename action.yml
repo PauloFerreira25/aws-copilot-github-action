@@ -34,7 +34,7 @@ inputs:
   deploy-env:
     required: false
     description: "Deploy the target environment before deploying the workload."
-    default: false
+    default: "false"
 
 runs:
   using: "node20"
