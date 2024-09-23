@@ -28,6 +28,13 @@ inputs:
   path:
     required: false
     description: "path name"
+  version:
+    required: false
+    description: "Copilot version"
+  deploy-env:
+    required: false
+    description: "Deploy the target environment before deploying the workload."
+    default: false
 
 runs:
   using: "node20"

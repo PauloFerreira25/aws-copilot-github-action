@@ -5,7 +5,7 @@ import { cacheFile, downloadTool, find } from '@actions/tool-cache'
 import { chmodSync } from 'fs'
 import { exec } from '@actions/exec'
 import { HttpClient } from '@actions/http-client'
-import { BearerCredentialHandler } from '@actions/http-client/auth'
+
 
 const COPILOT_CLI_TOOL_NAME = 'aws-copilot-cli'
 
@@ -66,15 +66,8 @@ async function install(): Promise<void> {
 }
 
 async function getLatestVersion(): Promise<string> {
-  const token = process.env['GITHUB_TOKEN']
-  const handlers = []
 
-  if (token) {
-    core.info('Using GITHUB_TOKEN to get latest version')
-    handlers.push(new BearerCredentialHandler(token))
-  }
-
-  const http = new HttpClient('aws-copilot-release', handlers, {
+  const http = new HttpClient('aws-copilot-release', [], {
     allowRetries: true,
     maxRetries: 3
   })
@@ -126,7 +119,7 @@ async function deployApp(): Promise<void> {
   const tag = core.getInput('tag')
   const resourceTags = core.getInput('resource-tags')
   const path = core.getInput('path') || '.'
-
+  const deployEnv = core.getInput('deploy-env') === 'true'
   const force = core.getInput('force') === 'true'
 
   if (!app) {
@@ -143,13 +136,13 @@ async function deployApp(): Promise<void> {
   ${name ? `--name ${name}` : ''} \
   ${tag ? `--tag ${tag}` : ''} \
   ${force ? '--force' : ''} \
+  ${deployEnv ? `--deploy-env` : ''} \
   ${resourceTags ? `--resource-tags ${resourceTags}` : ''}`
 
-  const deploy = await exec(cmd, [], {cwd: path})
+  const deploy = await exec(cmd, [], { cwd: path })
 
   core.debug(
-    `Deploying app ${app} to env ${env} ${
-      force ? 'with force' : ''
+    `Deploying app ${app} to env ${env} ${force ? 'with force' : ''
     } is done ${deploy}`
   )
 
